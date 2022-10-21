@@ -52,11 +52,15 @@ export default new VueRouter({
     },
     {
       path: '/search/:keyword?',
+      name: 'search',
       component: Search,
       meta: {
         show: true,
       },
-      name: 'search',
+      props: ($route) => ({
+        keyword: $route.params.keyword,
+        k: $route.query.k,
+      }),
     },
     {
       path: '/register',

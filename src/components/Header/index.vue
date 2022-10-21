@@ -69,15 +69,17 @@ export default {
 
   methods: {
     goSearch() {
-      this.$router.push({
+      // if (this.$route.query) {
+      console.log('Header', this.$route.query)
+      let location = {
         name: 'search',
-        params: {
-          keyword: this.keyword,
-        },
-        query: {
-          k: this.keyword,
-        },
-      })
+        params: { keyword: this.keyword || undefined },
+      }
+      location.query = this.$route.query
+      console.log(location)
+      // query: { k: this.keyword.toUpperCase() },
+      this.$router.push(location)
+      // }
     },
   },
 }

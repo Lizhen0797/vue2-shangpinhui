@@ -1,57 +1,61 @@
 <template>
   <div class="type-nav">
     <div class="container">
-      <div @mouseleave="leaveIndex">
+      <div @mouseleave="leaveShow" @mouseenter="show = true">
         <h2 class="all">全部商品分类</h2>
-        <div class="sort">
-          <div class="all-sort-list2" @click="goSearch">
-            <div
-              class="item bo"
-              v-for="(c1, index) in categoryList"
-              :key="c1.categoryId"
-              :class="{ cur: currentIndex === index }"
-            >
-              <h3 @mouseenter="changeIndex(index)">
-                <a
-                  :data-categoryName="c1.categoryName"
-                  :data-category1Id="c1.categoryId"
-                  >{{ c1.categoryName }}</a
-                >
-              </h3>
-              <!-- //二级  -->
+        <transition name="sort">
+          <div class="sort" v-show="show">
+            <div class="all-sort-list2" @click="goSearch">
               <div
-                class="item-list clearfix"
-                :style="{ display: currentIndex === index ? 'block' : 'none' }"
+                class="item bo"
+                v-for="(c1, index) in categoryList"
+                :key="c1.categoryId"
+                :class="{ cur: currentIndex === index }"
               >
+                <h3 @mouseenter="changeIndex(index)">
+                  <a
+                    :data-categoryName="c1.categoryName"
+                    :data-category1Id="c1.categoryId"
+                    >{{ c1.categoryName }}</a
+                  >
+                </h3>
+                <!-- //二级  -->
                 <div
-                  class="subitem"
-                  v-for="c2 in c1.categoryChild"
-                  :key="c2.categoryId"
+                  class="item-list clearfix"
+                  :style="{
+                    display: currentIndex === index ? 'block' : 'none',
+                  }"
                 >
-                  <dl class="fore">
-                    <dt>
-                      <a
-                        :data-categoryName="c2.categoryName"
-                        :data-category2Id="c2.categoryId"
-                        >{{ c2.categoryName }}</a
-                      >
-                    </dt>
-                    <!-- //三级 -->
-                    <dd>
-                      <em v-for="c3 in c2.categoryChild" :key="c3.categoryId">
+                  <div
+                    class="subitem"
+                    v-for="c2 in c1.categoryChild"
+                    :key="c2.categoryId"
+                  >
+                    <dl class="fore">
+                      <dt>
                         <a
-                          :data-categoryName="c1.categoryName"
-                          :data-category3Id="c3.categoryId"
-                          >{{ c3.categoryName }}</a
+                          :data-categoryName="c2.categoryName"
+                          :data-category2Id="c2.categoryId"
+                          >{{ c2.categoryName }}</a
                         >
-                      </em>
-                    </dd>
-                  </dl>
+                      </dt>
+                      <!-- //三级 -->
+                      <dd>
+                        <em v-for="c3 in c2.categoryChild" :key="c3.categoryId">
+                          <a
+                            :data-categoryName="c1.categoryName"
+                            :data-category3Id="c3.categoryId"
+                            >{{ c3.categoryName }}</a
+                          >
+                        </em>
+                      </dd>
+                    </dl>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </transition>
       </div>
       <nav class="nav">
         <a>123</a>
@@ -76,11 +80,12 @@ export default {
   data() {
     return {
       currentIndex: -1,
+      show: true,
     }
   },
 
   mounted() {
-    this.$store.dispatch('categoryList')
+    this.show = this.$route.path !== '/home' ? false : true
   },
   computed: {
     ...mapState({
@@ -92,28 +97,47 @@ export default {
     changeIndex: throttle(function (index) {
       this.currentIndex = index
     }, 50),
-    leaveIndex() {
+
+    leaveShow() {
       this.currentIndex = -1
+      // if (this.$route.path !== '/home') {
+      //   this.show = false
+      // }
+      this.show = this.$route.path !== '/home' ? false : true
     },
-    goSearch(event) {
-      let element = event.target
+    goSearch(e) {
+      // 存在一些问题：事件委派，是把全部的子节点【h3、dt、d1、em】的事件委派给父亲节点点击a标签的时候，才会进行路由跳转【怎么能确定点击的一定是a标签】I
+      //存在另外一个问题：即使你能确定点击的是a标签，如何区分是一级、二级、三级分类的标签。
+      //第一个问题：把子节点当中a标签，我加上自定义属性data-categoryName，其余的子节点是没有的
+      let element = e.target
+      //节点有一个属性dataset属性，可以获取节点的自定义属性与属性值 解构赋值
       let { categoryname, category1id, category2id, category3id } =
         element.dataset
-
+      //如果标签身上拥有categoryname一定是a标签
       if (categoryname) {
-        let location = {
-          name: 'search',
-        }
+        //一级分类、二级分类、三级分类的a标签
+        // 整理路由参数
+        let location = { name: 'search' }
         let query = { categoryName: categoryname }
         if (category1id) {
+          // 整理id1
           query.category1Id = category1id
         } else if (category2id) {
+          // 整理id2
           query.category2Id = category2id
-        } else if (category3id) {
+        } else {
+          // 整理id3
           query.category3Id = category3id
         }
+        //判断：如果路由跳转的时候，带有params参数，捎带脚传递过去
+        // if (this.$route.params) {
+        console.log('TypeNav', location)
+        location.params = this.$route.params
+        // 合并路径和参数
         location.query = query
+        // 路由调转
         this.$router.push(location)
+        // }
       }
     },
   },
@@ -239,6 +263,18 @@ export default {
           background: skyblue;
         }
       }
+    }
+    //进入开始状态
+    .sort-enter {
+      height: 0px;
+    }
+    //结束状态
+    .sort-enter-to {
+      height: 461px;
+    }
+    //动画时间速率
+    .sort-enter-active {
+      transition: all 0.5s linear;
     }
   }
 }
