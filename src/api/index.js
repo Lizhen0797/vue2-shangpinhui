@@ -1,5 +1,5 @@
 import requests from './request'
-import mockRequests from './mockAjax'
+import mockRequests from './mockRequest'
 
 export const reqCategoryList = () =>
   requests.get('/product/getBaseCategoryList')
