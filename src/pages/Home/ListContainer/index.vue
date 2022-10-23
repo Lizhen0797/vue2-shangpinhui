@@ -79,7 +79,6 @@
 
 <script>
 import { mapState } from 'vuex'
-import Carousel from '@/components/Carousel/index.vue'
 export default {
   name: 'ListContainers',
   data() {
@@ -94,7 +93,6 @@ export default {
     }),
   },
   methods: {},
-  components: { Carousel },
 }
 </script>
 

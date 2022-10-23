@@ -65,7 +65,11 @@ export default {
     }
   },
 
-  mounted() {},
+  mounted() {
+    this.$bus.$on('clearKeyword', () => {
+      this.keyword = ''
+    })
+  },
 
   methods: {
     goSearch() {
@@ -76,7 +80,6 @@ export default {
         params: { keyword: this.keyword || undefined },
       }
       location.query = this.$route.query
-      console.log(location)
       // query: { k: this.keyword.toUpperCase() },
       this.$router.push(location)
       // }

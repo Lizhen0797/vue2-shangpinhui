@@ -131,7 +131,6 @@ export default {
         }
         //判断：如果路由跳转的时候，带有params参数，捎带脚传递过去
         // if (this.$route.params) {
-        console.log('TypeNav', location)
         location.params = this.$route.params
         // 合并路径和参数
         location.query = query

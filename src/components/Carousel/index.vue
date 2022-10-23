@@ -18,7 +18,7 @@ import Swiper from 'swiper'
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: 'Carousel ',
+  name: 'Carousel',
   props: ['list'],
   data() {
     return {}

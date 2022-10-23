@@ -60,7 +60,6 @@ import Swiper from 'swiper';
 </template>
 
 <script>
-import Carousel from '@/components/Carousel/index.vue'
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'Floor',
@@ -70,7 +69,6 @@ export default {
   },
   mounted() {},
   methods: {},
-  components: { Carousel },
 }
 </script>
 
