@@ -6,15 +6,16 @@
       <div class="container">
         <div class="loginList">
           <p>尚品汇欢迎您！</p>
-          <p>
+          <p v-if="!userName">
             <span>请</span>
             <router-link to="/login">登录</router-link>
-            <router-link to="/register" class="register">免费注册</router-link>
+            <router-link to="/register"
+                         class="register">免费注册</router-link>
           </p>
-          <!-- <p v-else>
+          <p v-else>
             <a>{{ userName }}</a>
-            <a @click="logOut">退出登录</a>
-          </p> -->
+            <a @click="logout">退出登录</a>
+          </p>
         </div>
         <div class="typeList">
           <a href="###">我的尚品汇</a>
@@ -29,23 +30,23 @@
     <!--头部第二行 搜索区域-->
     <div class="bottom">
       <h1 class="logoArea">
-        <router-link to="/home" class="logo" title="尚品汇">
-          <img src="../image/logo.png" alt="" />
+        <router-link to="/home"
+                     class="logo"
+                     title="尚品汇">
+          <img src="../image/logo.png"
+               alt="" />
         </router-link>
       </h1>
       <div class="searchArea">
-        <form action="###" class="searchForm">
-          <input
-            type="text"
-            id="autocomplete"
-            class="input-error input-xxlarge"
-            v-model="keyword"
-          />
-          <button
-            class="sui-btn btn-xlarge btn-danger"
-            type="button"
-            @click="goSearch"
-          >
+        <form action="###"
+              class="searchForm">
+          <input type="text"
+                 id="autocomplete"
+                 class="input-error input-xxlarge"
+                 v-model="keyword" />
+          <button class="sui-btn btn-xlarge btn-danger"
+                  type="button"
+                  @click="goSearch">
             搜索
           </button>
         </form>
@@ -59,20 +60,20 @@ export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'Header',
 
-  data() {
+  data () {
     return {
       keyword: '',
     }
   },
 
-  mounted() {
+  mounted () {
     this.$bus.$on('clearKeyword', () => {
       this.keyword = ''
     })
   },
 
   methods: {
-    goSearch() {
+    goSearch () {
       // if (this.$route.query) {
       console.log('Header', this.$route.query)
       let location = {
@@ -84,7 +85,20 @@ export default {
       this.$router.push(location)
       // }
     },
+    async logout () {
+      try {
+        await this.$store.dispatch("userLogout")
+        this.$router.push('/home')
+      } catch (err) {
+        alert(err.message)
+      }
+    }
   },
+  computed: {
+    userName () {
+      return this.$store.state.user.userInfo.name
+    }
+  }
 }
 </script>
 <style lang="less" scoped>

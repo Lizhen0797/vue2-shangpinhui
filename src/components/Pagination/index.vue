@@ -4,7 +4,7 @@
             @click="$emit('getPageNo', pageNo - 1)">上一页</button>
     <button v-if="startNumAndEndNum.start > 1"
             @click="$emit('getPageNo', 1)"
-            :class="{active: page===pageNo}">1</button>
+            :class="{active: 1===pageNo}">1</button>
     <button v-if="startNumAndEndNum.start > 2">···</button>
 
     <!-- eslint-disable-next-line vue/no-use-v-if-with-v-for -->
@@ -17,7 +17,7 @@
     <button v-if="startNumAndEndNum.end < totalPage - 1">···</button>
     <button v-if="startNumAndEndNum.end < totalPage"
             @click="$emit('getPageNo', totalPage)"
-            :class="{active: page === totalPage}">{{ totalPage }}</button>
+            :class="{active: pageNo === totalPage}">{{ totalPage }}</button>
     <button :disabled="pageNo === totalPage"
             @click="$emit('getPageNo', pageNo + 1)">下一页</button>
 

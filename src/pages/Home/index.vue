@@ -1,7 +1,14 @@
 <template>
   <div>
-    <TypeNav /> <ListContainer /> <Recommend /><Rank /> <Like />
-    <Floor v-for="floor in floorList" :key="floor.id" :list="floor" /><Brand />
+    <TypeNav />
+    <ListContainer />
+    <Recommend />
+    <Rank />
+    <Like />
+    <Floor v-for="floor in floorList"
+           :key="floor.id"
+           :list="floor" />
+    <Brand />
   </div>
 </template>
 
@@ -16,11 +23,14 @@ import { mapState } from 'vuex'
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'Home',
-  data() {
+  data () {
     return {}
   },
-  mounted() {
+  mounted () {
     this.$store.dispatch('getFloorList')
+    if (localStorage.getItem("TOKEN")) {
+      this.$store.dispatch('getUserInfo')
+    }
   },
   computed: {
     ...mapState({
