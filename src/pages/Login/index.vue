@@ -86,8 +86,8 @@ export default {
 
   data () {
     return {
-      phone: '',
-      password: ''
+      phone: '13700000000',
+      password: '111111'
     }
   },
 
@@ -97,7 +97,8 @@ export default {
     async userLogin () {
       try {
         await this.$store.dispatch('userLogin', { phone: this.phone, password: this.password })
-        this.$router.push('/home')
+        let toPath = this.$route.query.redirect || 'home'
+        this.$router.push(toPath)
       } catch (err) {
         alert(err.message)
       }

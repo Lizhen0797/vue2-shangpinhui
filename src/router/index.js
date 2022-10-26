@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import routes from './routes'
-
+import store from '../store'
 let originPush = VueRouter.prototype.push
 let originReplace = VueRouter.prototype.push
 VueRouter.prototype.push = function (location, resolve, reject) {
@@ -31,9 +31,39 @@ VueRouter.prototype.replace = function (location, resolve, reject) {
 
 Vue.use(VueRouter)
 
-export default new VueRouter({
+let router = new VueRouter({
   routes: routes,
   scrollBehavior (_to, _from, _savedPosition) {
     return { y: 0 }
   }
 })
+
+router.beforeEach(async (to, _from, next) => {
+  let token = store.state.user.token
+  if (token) {
+    if (to.path === '/login' || to.path === '/register') {
+      next('/home')
+    } else {
+      if (store.state.user.userInfo.name) {
+        next()
+      } else {
+        try {
+          await store.dispatch('getUserInfo')
+          next()
+        } catch (err) {
+          await store.dispatch('userLogout')
+          next('/login')
+        }
+      }
+    }
+  } else {
+    let toPath = to.path
+    if (toPath.includes('/trade') || toPath.includes('/pay') || toPath.includes("center")) {
+      next('/login?redirect=' + toPath)
+    } else {
+      next()
+    }
+  }
+})
+
+export default router

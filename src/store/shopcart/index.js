@@ -38,10 +38,8 @@ const actions = {
     updateAllShopCartChecked ({ dispatch, getters }, isChecked) {
         let promiseAll = [];
         getters.cartList.cartInfoList.forEach((item) => {
-            if (item.isChecked === 1) {
-                let promise = dispatch("updateShopCartCheckedById", { skuId: item.skuId, isChecked: isChecked })
-                promiseAll.push(promise)
-            }
+            let promise = dispatch("updateShopCartCheckedById", { skuId: item.skuId, isChecked: isChecked })
+            promiseAll.push(promise)
         });
         return Promise.all(promiseAll);
     }

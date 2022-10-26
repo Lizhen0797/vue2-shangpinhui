@@ -76,8 +76,8 @@
           <i class="summoney">{{totalPrice}}</i>
         </div>
         <div class="sumbtn">
-          <a class="sum-btn"
-             href="javascript:">结算</a>
+          <router-link class="sum-btn"
+                       to="/trade">结算</router-link>
         </div>
       </div>
     </div>
@@ -180,7 +180,7 @@ export default {
     },
     async updateAllShopCartChecked (e) {
       try {
-        let isChecked = e.targetChecked ? 1 : 0
+        let isChecked = e.target.checked ? 1 : 0
         await this.$store.dispatch('updateAllShopCartChecked', isChecked)
         this.getData()
       } catch (err) {

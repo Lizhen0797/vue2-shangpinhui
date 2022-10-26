@@ -28,9 +28,6 @@ export default {
   },
   mounted () {
     this.$store.dispatch('getFloorList')
-    if (localStorage.getItem("TOKEN")) {
-      this.$store.dispatch('getUserInfo')
-    }
   },
   computed: {
     ...mapState({

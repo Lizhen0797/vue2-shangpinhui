@@ -62,6 +62,37 @@ export const reqLogout = () => requests({
   method: 'get'
 })
 
+export const reqGetUserAddressList = () => requests({
+  url: '/user/userAddress/auth/findUserAddressList',
+  method: 'get'
+})
+
+export const reqUserTradeInfoList = () => requests({
+  url: '/order/auth/trade',
+  method: 'get'
+})
+
+export const reqSubmitOrder = (tradeNo, data) => requests({
+  url: `order/auth/submitOrder?tradeNo=${tradeNo}`,
+  method: 'post',
+  data: data
+})
+
+export const reqGetOrderInfo = (orderId) => requests({
+  url: `/payment/weixin/createNative/${orderId}`,
+  method: 'get'
+})
+
+export const reqGetOrderPayStatus = (orderId) => requests({
+  url: `/payment/weixin/queryPayStatus/${orderId}`,
+  method: 'get '
+})
+
+export const reqGetOrderList = (page, limit) => requests({
+  url: `/order/auth/${page}/${limit}`,
+  method: 'get'
+})
+
 export const reqBannerList = () => mockRequests.get('/banner')
 
 export const reqFloorList = () => mockRequests.get('/floor')
