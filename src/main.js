@@ -13,6 +13,8 @@ import * as api from './api'
 
 import { MessageBox } from 'element-ui';
 
+import './plugins/validate'
+
 
 Vue.config.productionTip = false
 Vue.component(TypeNav.name, TypeNav)

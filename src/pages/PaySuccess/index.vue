@@ -30,9 +30,6 @@ export default {
       next(false)
     }
   },
-  beforeRouteUpdate (to, from, next) {
-
-  }
 };
 </script>
 
